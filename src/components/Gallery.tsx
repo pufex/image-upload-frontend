@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useSearchParams } from "react-router"
 import type { GalleryPhoto, ImageDeclaration, ImageChunk } from "../types"
+import { usePagination } from "../hooks/usePagination/usePagination"
 import { axiosPublic } from "../api/axiosPublic"
 import GalleryImage from "./GalleryImage"
 import GallerySkeleton from "./GallerySkeleton"
@@ -16,6 +17,13 @@ export default function Gallery() {
     const page = !pageParam || isNaN(Number(pageParam))
         ? 1
         : Number(pageParam)
+
+    const {
+        paginatedList,
+        nextButton,
+        previousButton,
+        pagination
+    } = usePagination<GalleryPhoto>(photos, 10)
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -93,7 +101,14 @@ export default function Gallery() {
             ? <h1 className="w-full text-center my-6 text-xl font-medium text-red-600">
                 {error}
             </h1>
-            : <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
-                {photos.map((photo) => <GalleryImage photo={photo} />)}
+            : <div className="w-full">
+                <div className="w-full flex items-center gap-2 mb-2">
+                    {previousButton}
+                    {pagination}
+                    {nextButton}
+                </div>
+                <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
+                    {paginatedList.map((photo) => <GalleryImage photo={photo} />)}
+                </div>
             </div>
 }
