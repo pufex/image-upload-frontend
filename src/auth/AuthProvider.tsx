@@ -18,8 +18,8 @@ type LoginFormFields = z.infer<typeof loginSchema>
 export type AuthContextType = {
     auth: AuthObjectState,
     refresh: () => Promise<AuthObject | undefined>,
-    register: (data: RegisterFormFields) => void,
-    login: (data: LoginFormFields) => void
+    register: (data: RegisterFormFields) => Promise<void>,
+    login: (data: LoginFormFields) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
