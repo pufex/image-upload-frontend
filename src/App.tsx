@@ -1,79 +1,21 @@
-import { FormProvider, useForm } from "react-hook-form"
-import ImageInput from "./components/ImageInput"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { photoUploadSchema } from "./schemas/photoUploadSchema"
-import { z } from "zod"
-import Button from "./components/Button"
-import { axiosPublic } from "./api/axiosPublic"
+import { Routes, Route, Navigate } from "react-router"
+import Nav from "./layouts/Nav"
+import HomePage from "./pages/HomePage"
+import ImageUplaodPage from "./pages/ImageUploadPage"
 
-type PhotoFormFields = z.infer<typeof photoUploadSchema>
+export const BASE_PAGE = "/photos"
 
-function App() {
+export default function App() {
+  return <Routes>
+    <Route path={BASE_PAGE} element={<Nav />}>
+      <Route index element={<HomePage />}/>
+      <Route path="upload-photo" element={<ImageUplaodPage />}/>
+    </Route>
 
-  const methods = useForm<PhotoFormFields>({
-    resolver: zodResolver(photoUploadSchema)
-  })
-
-  const { formState: { errors }, handleSubmit } = methods
-
-  const onSubmit = (data: PhotoFormFields) => {
-    console.log("submitting")
-    const handleImageSubmission = async (chunksArray: string[], chunksAmount: number, size: Number) => {
-      try {
-        const declarationResponse = await axiosPublic.post(
-          "/image/declaration",
-          { size, chunksAmount },
-          { headers: { "Content-Type": "application/json" } }
-        )
-
-        const { declaration_id: image_id } = declarationResponse.data
-        const promisesArray = []
-        for(let i = 0; i < chunksAmount; i++){
-          promisesArray.push(i+1)
-        }
-
-        const responses = await Promise.all(promisesArray.map((chunkNumber) => {
-          return axiosPublic.post(
-            "/image/upload",
-            {  image_id, chunksNumber: chunkNumber, data: chunksArray[chunkNumber-1]},
-            { headers: {"Content-Type": "application/json"}}
-          )
-        }))
-        console.log(responses)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
-    const fileReader = new FileReader()
-    if (data.photo instanceof FileList) {
-      const size = data.photo[0].size
-      const chunkSize = 100000
-      fileReader.readAsDataURL(data.photo[0])
-      fileReader.addEventListener("load", async () => {
-        const { result } = fileReader
-        if (typeof result === "string") {
-          const length = result.length
-          const chunksAmount = Math.ceil(length / chunkSize)
-          const chunksArray: string[] = []
-          for (let i = 0; i < chunksAmount; i++) {
-            chunksArray.push(result.slice(i * chunkSize, (i + 1) * chunkSize))
-          }
-          console.log(chunksArray)
-          await handleImageSubmission(chunksArray, chunksAmount, size)
-        }
-      })
-    }
-  }
-
-  return <FormProvider {...methods}>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <ImageInput name="photo" />
-      <Button type="submit">
-        Submit
-      </Button>
-    </form>
-  </FormProvider>
+    <Route path="/*" element={<Navigate to={BASE_PAGE} />} />
+  </Routes>
 }
 
-export default App
+  
+
+  
