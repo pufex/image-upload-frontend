@@ -25,3 +25,18 @@ export type ImageChunk = {
     createdAt: Date,
     updatedAt: Date
 }
+
+export type UserType = {
+    _id: string,
+    name: string,
+    email: string,
+    password: string,
+    isAdmin: boolean,
+    createdAt: Date,
+    updatedAt: Date
+}
+
+export type AuthObject = {
+    user: UserType,
+    accessToken: string
+} | null
