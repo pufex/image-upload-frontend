@@ -19,7 +19,7 @@ export default function Gallery() {
         : Number(pageParam)
 
     const {
-        paginatedList,
+        paginatedList: paginatedPhotos,
         nextButton,
         previousButton,
         pagination
@@ -108,7 +108,7 @@ export default function Gallery() {
                     {nextButton}
                 </div>
                 <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
-                    {paginatedList.map((photo) => <GalleryImage photo={photo} />)}
+                    {paginatedPhotos.map((photo) => <GalleryImage photo={photo} />)}
                 </div>
             </div>
 }
