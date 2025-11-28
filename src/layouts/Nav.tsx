@@ -27,7 +27,7 @@ export default function Nav(){
                 </ul>
             </div>
         </nav>
-        <main className="w-full max-w-5xl mx-auto">
+        <main className="w-full max-w-5xl mx-auto px-4">
             <Outlet />
         </main>
     </>
