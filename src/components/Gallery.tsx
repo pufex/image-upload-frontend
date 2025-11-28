@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react"
 import { useSearchParams } from "react-router"
-import type { GalleryPhoto, ImageDeclaration, ImageChunk } from "../types"
-import { usePagination } from "../hooks/usePagination/usePagination"
+import type { GalleryPhoto, ImageDeclaration, ImageChunk, DeclarationsCount } from "../types"
 import { axiosPublic } from "../api/axiosPublic"
 import GalleryImage from "./GalleryImage"
 import GallerySkeleton from "./GallerySkeleton"
+import { useServerPagination } from "../hooks/useServerPagination/usePagination"
 
+const photosPerPage = 10
 
 export default function Gallery() {
 
+    const [pagesCount, setPagesCount] = useState(0)
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [photos, setPhotos] = useState<GalleryPhoto[]>([])
@@ -19,16 +21,21 @@ export default function Gallery() {
         : Number(pageParam)
 
     const {
-        paginatedList: paginatedPhotos,
         nextButton,
         previousButton,
         pagination
-    } = usePagination<GalleryPhoto>(photos, 10)
+    } = useServerPagination(pagesCount, photosPerPage)
 
     useEffect(() => {
         const fetchImages = async () => {
             try {
                 setLoading(true)
+
+                const countResponse = await axiosPublic.get("/image/declarations/count")
+                const { declarationsCount }: DeclarationsCount = countResponse.data
+
+                console.log(countResponse.data)
+                setPagesCount(Math.ceil(declarationsCount / photosPerPage))
                 const response = await axiosPublic.get(`/image/${page}`)
                 const declarations: ImageDeclaration[] = response.data
                 setPhotos(declarations.map(({ _id }) => ({
@@ -108,7 +115,7 @@ export default function Gallery() {
                     {nextButton}
                 </div>
                 <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
-                    {paginatedPhotos.map((photo) => <GalleryImage photo={photo} />)}
+                    {photos.map((photo) => <GalleryImage photo={photo} />)}
                 </div>
             </div>
 }

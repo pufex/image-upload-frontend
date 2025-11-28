@@ -1,3 +1,7 @@
+export type DeclarationsCount = {
+    declarationsCount: number
+}
+
 export type GalleryPhoto = {
     loading: boolean,
     error: string,
