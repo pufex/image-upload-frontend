@@ -6,9 +6,10 @@ import Button from "./Button"
 type ImageInputProps = {
     name: string,
     id?: string,
+    className?: string
 }
 
-export default function ImageInput({ name, id }: ImageInputProps) {
+export default function ImageInput({ name, id, className = "" }: ImageInputProps) {
 
     const [preview, setPreview] = useState<string>("")
     const { register, formState: {errors} } = useFormContext()
@@ -43,7 +44,7 @@ export default function ImageInput({ name, id }: ImageInputProps) {
         inputRef.current = e
     }
 
-    return <div className="w-full flex flex-col items-center px-4 py-8">
+    return <div className={`${className} w-full flex flex-col items-center`}>
         <input
             className="hidden"
             type="file"
@@ -54,9 +55,6 @@ export default function ImageInput({ name, id }: ImageInputProps) {
             ref={handleRef}
             onChange={handleChange}
         />
-        <h1 className="text-2xl font-semibold text-black mb-4">
-            Upload an image
-        </h1>
         <div className="w-full max-w-[200px] sm:max-w-[300px]">
             <div 
                 className={`mb-4 flex items-center justify-center rounded-md w-[200px] h-[200px] sm:h-[300px] sm:w-[300px] ${!preview && "bg-slate-300 border-slate-500 border-6 border-dashed"} cursor-pointer`}
