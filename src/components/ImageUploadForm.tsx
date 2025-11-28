@@ -16,7 +16,7 @@ export default function ImageUploadForm() {
     })
 
     const [loading, setLoading] = useState(false)
-    const { formState: { errors }, handleSubmit } = methods
+    const { formState: { errors }, handleSubmit, setError } = methods
 
     const onSubmit = (data: PhotoFormFields) => {
         const handleImageSubmission = async (chunksArray: string[], chunksAmount: number, size: Number) => {
@@ -43,6 +43,7 @@ export default function ImageUploadForm() {
                 console.log(responses)
             } catch (err) {
                 console.log(err)
+                setError("root", {message: "We failed to submit this image. Try again later."})
             }
         }
 
@@ -67,6 +68,8 @@ export default function ImageUploadForm() {
                 }
                 setLoading(false)
             })
+        }else{
+            setError("root", {message: "There was a problem with submitted files."})
         }
         setLoading(false)
     }
@@ -75,6 +78,12 @@ export default function ImageUploadForm() {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col items-center"
         >
+            {
+                errors.root
+                    && <p className="text-lg text-center text-red-600 font-medium">
+                        {errors.root.message}
+                    </p>
+            }
             <ImageInput
                 name="photo"
                 id="photo"
