@@ -3,7 +3,7 @@ import Nav from "./layouts/Nav"
 import HomePage from "./pages/HomePage"
 import ImageUplaodPage from "./pages/ImageUploadPage"
 
-export const BASE_PAGE = "/images"
+export const BASE_PAGE = "/photos"
 
 export default function App() {
   return <Routes>
