@@ -1,1 +1,21 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+.skeleton-gallery-animation{
+    animation-name: gallerySkeleton;
+    animation-duration: 1000ms;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+}
+
+@keyframes gallerySkeleton {
+  0% {
+    background-color: rgb(112, 115, 136);
+  }
+  50% {
+    background-color: rgb(171, 173, 190);
+  }
+  100% {
+    background-color: rgb(112, 115, 136);
+  }
+}
