@@ -9,16 +9,7 @@ export type AuthContextType = {
     auth: AuthObject
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
-
-export const useAuth = () => {
-    const auth = useContext(AuthContext)
-    if(auth){
-        return auth;
-    }else{
-        throw new Error("useAuth() used outside its provider.")
-    }
-}
+export const AuthContext = createContext<AuthContextType | null>(null)
 
 export default function AuthProvider({children}: AuthProviderProps){
     const [auth, setAuth] = useState(null)
