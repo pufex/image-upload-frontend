@@ -30,7 +30,7 @@ export default function AuthProvider({children}: AuthProviderProps){
 
     const refresh = useCallback(async () => {
         try{
-            const response = await axiosPublic.get("/auth/refresh")
+            const response = await axiosPublic.get("/auth/refresh", { withCredentials: true})
             const authObject = response.data as AuthObject
             return authObject
         }catch(err){
@@ -56,7 +56,10 @@ export default function AuthProvider({children}: AuthProviderProps){
             const response = await axiosPublic.post(
                 "/auth/login",
                 data,
-                { headers: { "Content-Type": "application/json" } }
+                { 
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true,
+                }
             )
             const authObject = response.data as AuthObject
             setAuth(authObject)
