@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useForm, FormProvider } from "react-hook-form"
 import { loginSchema } from "../../schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {z} from "zod"
+import { z } from "zod"
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { LoaderCircle } from "lucide-react";
@@ -13,35 +13,38 @@ type LoginFormFields = z.infer<typeof loginSchema>
 
 export default function RegisterForm() {
 
-    const {login} = useAuth()
+    const { login } = useAuth()
     const [loading, setLoading] = useState(false)
 
     const methods = useForm<LoginFormFields>({
         resolver: zodResolver(loginSchema)
     })
-    const {formState: {errors}, handleSubmit, setError} = methods
+    const { formState: { errors }, handleSubmit, setError } = methods
 
     const onSubmit = async (data: LoginFormFields) => {
-        try{
+        try {
             setLoading(true)
             await login(data)
-        }catch(err){
-            if(err instanceof AxiosError){
-                switch(err.response?.status){
-                    case 400: 
-                        setError("root", {message: "The credentials you have provided are invalid."})
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                switch (err.response?.status) {
+                    case 400:
+                        setError("root", { message: "The credentials you have provided are invalid." })
                         break;
-                    case 409: 
-                        setError("root", {message: "Invalid email or password."})
+                    case 409:
+                        setError("root", { message: "Invalid email or password." })
                         break;
-                    default: 
-                        setError("root", {message: "We failed to create this account."})
+                    case 404:
+                        setError("root", { message: "Invalid email or password." })
+                        break;
+                    default:
+                        setError("root", { message: "We failed to create this account." })
                         break;
                 }
-            }else{
-                setError("root", {message: "You failed to log in."})
+            } else {
+                setError("root", { message: "You failed to log in." })
             }
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
@@ -53,9 +56,9 @@ export default function RegisterForm() {
         >
             {
                 errors.root &&
-                    <p className="text-xl font-medium text-center text-red-600">
-                        {typeof errors.root.message === "string" && errors.root.message}
-                    </p>
+                <p className="text-xl font-medium text-center text-red-600">
+                    {typeof errors.root.message === "string" && errors.root.message}
+                </p>
             }
 
             <Input
@@ -73,7 +76,7 @@ export default function RegisterForm() {
                 className="mb-4"
                 placeholder="*********"
             />
-            <Button 
+            <Button
                 type="submit"
                 className="w-full"
                 disabled={loading}
@@ -82,7 +85,7 @@ export default function RegisterForm() {
                     loading
                         ? <>
                             Logging in...
-                            <LoaderCircle className="w-6 h-6 animate-spin text-white"/>
+                            <LoaderCircle className="w-6 h-6 animate-spin text-white" />
                         </>
                         : "Log in"
                 }
