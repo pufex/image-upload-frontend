@@ -2,7 +2,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { axiosPublic } from "../api/axiosPublic"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { photoUploadSchema } from "../schemas/photoUploadSchema"
-import type {z} from "zod"
+import type { z } from "zod"
 import ImageInput from "./ImageInput"
 import Button from "./Button"
 
@@ -65,11 +65,21 @@ export default function ImageUploadForm() {
         }
     }
     return <FormProvider {...methods}>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <ImageInput name="photo" />
-      <Button type="submit">
-        Submit
-      </Button>
-    </form>
-  </FormProvider>
+        <form 
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col items-center"
+        >
+            <ImageInput
+                name="photo"
+                id="photo"
+                className="mb-4 mt-6"
+            />
+            <Button 
+                type="submit"
+                className="w-full max-w-[200px] sm:max-w-[300px]"
+            >
+                Submit
+            </Button>
+        </form>
+    </FormProvider>
 }
