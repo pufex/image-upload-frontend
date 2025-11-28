@@ -1,4 +1,6 @@
 export type GalleryPhoto = {
+    loading: boolean,
+    error: string,
     image_id: string,
     data: string,
 }
