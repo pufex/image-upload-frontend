@@ -4,7 +4,7 @@ import Gallery from "../components/Gallery"
 export default function HomePage(){
     return <>
         <HomePageHeader />
-        <div>
+        <div className="pb-8">
             <h1 className="w-full text-left text-black text-2xl font-semibold mb-4">
                 Gallery
             </h1>
