@@ -17,10 +17,8 @@ export default function Input({ className, name, id, label, type, placeholder }:
 
     return <div className={className}>
         {
-
-
-            !label && windowWidth <= 600
-                ? <div className="flex items-center justify-center gap-4 mb-2">
+            label && windowWidth > 600
+                ? <div className="flex items-center justify-between gap-4 mb-2">
                     {
                         label &&
                         <label
@@ -44,7 +42,7 @@ export default function Input({ className, name, id, label, type, placeholder }:
                 : null
         }
         <input
-            className="w-full outline-none h-20 border-2 border-black/20 focus:border-blue-600 rounded-lg px-2 text-xl text-black"
+            className="w-full outline-none h-10 border-2 border-black/20 focus:border-blue-600 rounded-lg px-2 text-lg text-black"
             type={type}
             id={id}
             placeholder={placeholder}
