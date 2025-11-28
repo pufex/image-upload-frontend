@@ -3,7 +3,7 @@ import { useAuth } from "./useAuth"
 import { axiosPrivate } from "../axiosPrivate"
 
 export const useAxiosPrivate = () => {
-    const {auth} = useAuth()
+    const {auth, refresh} = useAuth()
 
     useEffect(() => {
 
@@ -23,8 +23,10 @@ export const useAxiosPrivate = () => {
                 const prevRequest = err?.config
                 if(err?.response.status === 403 && !prevRequest.sent){
                     prevRequest.sent = true
-                    const accessToken = await refresh()
-                    prevRequest.headers["authorization"] = `Bearer ${accessToken}`
+                    const authObject = await refresh()
+                    if(authObject){
+                        prevRequest.headers["authorization"] = `Bearer ${authObject.accessToken}`
+                    }
                     return axiosPrivate(prevRequest)
                 }
                 return Promise.reject(err)

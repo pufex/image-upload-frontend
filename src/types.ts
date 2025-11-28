@@ -39,4 +39,4 @@ export type UserType = {
 export type AuthObject = {
     user: UserType,
     accessToken: string
-} | null
+}
