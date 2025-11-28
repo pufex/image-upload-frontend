@@ -1,20 +1,24 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import type { AuthObject } from "../types";
 import { axiosPublic } from "../api/axiosPublic";
+import LoadingPage from "../layouts/LoadingPage";
 
 type AuthProviderProps = {
     children: React.ReactNode
 }
 
+type AuthObjectState = AuthObject | null
+
 export type AuthContextType = {
-    auth: AuthObject | null,
+    auth: AuthObjectState,
     refresh: () => Promise<AuthObject | undefined>
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
 export default function AuthProvider({children}: AuthProviderProps){
-    const [auth, setAuth] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [auth, setAuth] = useState<AuthObjectState>(null)
 
     const refresh = useCallback(async () => {
         try{
@@ -27,7 +31,28 @@ export default function AuthProvider({children}: AuthProviderProps){
         }
     }, [auth])
 
+    useEffect(() => {
+        const getAuthObject = async () => {
+            setLoading(true)
+            try{
+                const authObject = await refresh()
+                setAuth(authObject ? authObject : null)
+            }catch(err){
+                console.log(err)
+                setAuth(null)
+            }finally{
+                setLoading(false)
+            }
+        }
+
+        getAuthObject()
+    }, [])
+
     return <AuthContext.Provider value={{auth, refresh}}>
-        {children}
+        {
+            loading
+                ? <LoadingPage />
+                : children
+        }
     </AuthContext.Provider>
 }
