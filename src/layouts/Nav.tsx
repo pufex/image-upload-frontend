@@ -1,10 +1,11 @@
 import { Outlet } from "react-router"
 import { Link } from "react-router"
+import UnloggedOnlyComponent from "../auth/components/UnloggedOnlyComponent"
 
-export default function Nav(){
+export default function Nav() {
 
     return <>
-        <div className="w-full h-20"/>
+        <div className="w-full h-20" />
         <nav className="fixed top-0 left-0 w-full h-20 bg-blue-700 border-b-2 border-b-blue-800">
             <div className="h-full w-full max-w-5xl mx-auto px-4 flex items-center justify-center gap-4">
                 <ul className="flex items-center gap-4">
@@ -24,6 +25,24 @@ export default function Nav(){
                             Upload photo
                         </Link>
                     </li>
+                    <UnloggedOnlyComponent>
+                        <li>
+                            <Link
+                                to="/auth/login"
+                                className="text-xl text-white font-semibold"
+                            >
+                                Login
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/auth/register"
+                                className="text-xl text-white font-semibold"
+                            >
+                                Register
+                            </Link>
+                        </li>
+                    </UnloggedOnlyComponent>
                 </ul>
             </div>
         </nav>
