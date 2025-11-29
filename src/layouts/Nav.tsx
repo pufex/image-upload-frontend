@@ -1,6 +1,7 @@
 import { Outlet } from "react-router"
 import { Link } from "react-router"
 import UnloggedOnlyComponent from "../auth/components/UnloggedOnlyComponent"
+import UserBubble from "../auth/components/UserBubble"
 
 export default function Nav() {
 
@@ -43,6 +44,7 @@ export default function Nav() {
                             </Link>
                         </li>
                     </UnloggedOnlyComponent>
+                    <UserBubble />
                 </ul>
             </div>
         </nav>
